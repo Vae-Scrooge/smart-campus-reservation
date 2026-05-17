@@ -72,7 +72,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getResources } from '../api/resource'
+import { getResources, getResourcesByType } from '../api/resource'
 import { createReservation } from '../api/reservation'
 
 const activeType = ref('all')
@@ -96,13 +96,9 @@ async function loadResources() {
   try {
     const res = activeType.value === 'all'
       ? await getResources()
-      : await getResources() // 前端过滤
+      : await getResourcesByType(activeType.value)
     if (res.code === 200) {
-      let data = res.data
-      if (activeType.value !== 'all') {
-        data = data.filter(r => r.type === activeType.value)
-      }
-      resources.value = data
+      resources.value = res.data
     }
   } catch (e) {
     // ignore

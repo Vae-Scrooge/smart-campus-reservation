@@ -48,7 +48,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/<你的用户名>/smart-campus-reservation.git
+git clone https://github.com/Vae-Scrooge/smart-campus-reservation.git
 cd smart-campus-reservation
 
 # 一键启动所有服务

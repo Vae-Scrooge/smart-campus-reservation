@@ -86,8 +86,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getResources } from '../api/resource'
-import { getMyReservations } from '../api/reservation'
+import { getAdminResources, getAllReservations, createResource } from '../api/admin'
 
 const activeTab = ref('resources')
 const allResources = ref([])
@@ -105,7 +104,7 @@ const newResource = ref({
 
 async function loadData() {
   try {
-    const [resR, resV] = await Promise.all([getResources(), getMyReservations()])
+    const [resR, resV] = await Promise.all([getAdminResources(), getAllReservations()])
     if (resR.code === 200) allResources.value = resR.data
     if (resV.code === 200) allReservations.value = resV.data
   } catch (e) {
@@ -116,9 +115,12 @@ async function loadData() {
 async function addResource() {
   adding.value = true
   try {
-    // 实际项目中这里应该调用新增API
-    ElMessage.success('新增成功（演示模式）')
-    showAddDialog.value = false
+    const res = await createResource(newResource.value)
+    if (res.code === 200) {
+      ElMessage.success('新增成功')
+      showAddDialog.value = false
+      await loadData()
+    }
   } finally {
     adding.value = false
   }
