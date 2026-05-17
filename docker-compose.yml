@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: campus-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: smart_campus
+      MYSQL_USER: campus
+      MYSQL_PASSWORD: campus123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - campus-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: campus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - campus-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: campus-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_campus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: campus
+      SPRING_DATASOURCE_PASSWORD: campus123
+      SPRING_REDIS_HOST: redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - campus-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: campus-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - campus-net
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  campus-net:
+    driver: bridge

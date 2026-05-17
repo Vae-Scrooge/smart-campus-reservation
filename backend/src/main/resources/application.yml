@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/smart_campus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: campus
+    password: campus123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 3000
+
+app:
+  jwt:
+    secret: SmartCampusReservationSystem2024SecretKeyForJWT
+    expiration-ms: 86400000
+
+  reservation:
+    no-show-timeout-minutes: 30
+    max-duration-hours: 4
+    credit:
+      initial-score: 100
+      deduct-on-no-show: 10
+      reward-on-use: 2
