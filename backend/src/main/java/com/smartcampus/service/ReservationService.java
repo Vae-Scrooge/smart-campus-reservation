@@ -9,7 +9,9 @@ import com.smartcampus.repository.ResourceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class ReservationService {
             throw new IllegalArgumentException("该资源当前不可用");
         }
 
-        if (req.getStartTime().isAfter(req.getEndTime()) || req.getStartTime().equals(req.getEndTime())) {
+        if (req.getStartTime().compareTo(req.getEndTime()) >= 0) {
             throw new IllegalArgumentException("预约时间不合法");
         }
 
@@ -98,7 +100,7 @@ public class ReservationService {
         }
 
         reservation.setStatus("CHECKED_IN");
-        reservation.setCheckinTime(LocalDateTime.now());
+        reservation.setCheckinTime(LocalDateTime.now().toString());
         Reservation saved = reservationRepository.save(reservation);
 
         userService.updateCreditScore(reservation.getUser().getId(), 2);
@@ -111,7 +113,9 @@ public class ReservationService {
         LocalDateTime now = LocalDateTime.now();
 
         for (Reservation r : pending) {
-            LocalDateTime deadline = LocalDateTime.of(r.getDate(), r.getStartTime());
+            LocalDate date = LocalDate.parse(r.getDate());
+            LocalTime startTime = LocalTime.parse(r.getStartTime());
+            LocalDateTime deadline = LocalDateTime.of(date, startTime);
             if (now.isAfter(deadline.plusMinutes(30))) {
                 r.setStatus("NO_SHOW");
                 reservationRepository.save(r);

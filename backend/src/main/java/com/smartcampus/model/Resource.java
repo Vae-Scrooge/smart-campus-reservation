@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -35,14 +33,12 @@ public class Resource {
     @Column(columnDefinition = "VARCHAR(20) DEFAULT 'AVAILABLE'")
     private String status = "AVAILABLE";
 
-    private LocalTime openTime = LocalTime.of(8, 0);
-    private LocalTime closeTime = LocalTime.of(22, 0);
+    @Column(length = 5)
+    private String openTime = "08:00";
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(length = 5)
+    private String closeTime = "22:00";
 
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+    private String createdAt;
+    private String updatedAt;
 }

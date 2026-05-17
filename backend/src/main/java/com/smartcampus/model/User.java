@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,22 +21,24 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String email;
+    @Column(nullable = false, length = 50)
     private String realName;
-    private String studentId;
-    private String phone;
 
-    @Column(name = "credit_score", columnDefinition = "INT DEFAULT 100")
-    private Integer creditScore = 100;
+    @Column(name = "student_id", unique = true, length = 20)
+    private String studentId;
 
     @Column(columnDefinition = "VARCHAR(20) DEFAULT 'USER'")
     private String role = "USER";
 
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(columnDefinition = "INT DEFAULT 100")
+    private Integer creditScore = 100;
 
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+    @Column(length = 20)
+    private String phone;
+
+    @Column(length = 100)
+    private String email;
+
+    private String createdAt;
+    private String updatedAt;
 }

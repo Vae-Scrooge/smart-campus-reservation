@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -26,25 +23,19 @@ public class Reservation {
     @JoinColumn(name = "resource_id", nullable = false)
     private Resource resource;
 
-    @Column(nullable = false)
-    private LocalDate date;
+    @Column(nullable = false, length = 10)
+    private String date;
 
-    @Column(nullable = false)
-    private LocalTime startTime;
+    @Column(nullable = false, length = 5)
+    private String startTime;
 
-    @Column(nullable = false)
-    private LocalTime endTime;
+    @Column(nullable = false, length = 5)
+    private String endTime;
 
     @Column(columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
     private String status = "PENDING";
 
-    private LocalDateTime checkinTime;
-
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+    private String checkinTime;
+    private String createdAt;
+    private String updatedAt;
 }
