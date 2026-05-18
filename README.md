@@ -106,7 +106,11 @@ smart-campus-reservation/
 
 ## 演示截图
 
-> （建议放几张页面截图增加可读性）
+![登录页](./screenshots/01-login.png)
+![资源列表](./screenshots/02-resources.png)
+![预约管理](./screenshots/03-reservations.png)
+![管理后台](./screenshots/04-admin.png)
+![个人中心](./screenshots/05-profile.png)
 
 ## 关于
 
