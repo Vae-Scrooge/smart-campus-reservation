@@ -35,7 +35,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_campus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_campus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: campus
       SPRING_DATASOURCE_PASSWORD: campus123
       SPRING_REDIS_HOST: redis

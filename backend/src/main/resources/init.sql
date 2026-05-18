@@ -2,6 +2,9 @@
 CREATE DATABASE IF NOT EXISTS smart_campus DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE smart_campus;
 
+-- 关键：设置连接字符集为 utf8mb4，避免 UTF-8 中文被 latin1 双倍编码
+SET NAMES utf8mb4;
+
 -- 用户表
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
