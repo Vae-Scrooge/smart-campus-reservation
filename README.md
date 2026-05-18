@@ -175,7 +175,7 @@ npm run dev
 
 ## 📡 API 概览
 
-| 方法 | 路径 | 说明 | 认证 |
+| 方法 | 路径 | 说明 | 需Token |
 |------|------|------|------|
 | `POST` | `/api/auth/login` | 用户登录，返回 JWT | ❌ |
 | `POST` | `/api/auth/register` | 用户注册 | ❌ |
