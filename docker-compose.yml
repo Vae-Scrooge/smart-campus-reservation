@@ -5,10 +5,10 @@ services:
     image: mysql:8.0
     container_name: campus-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
       MYSQL_DATABASE: smart_campus
       MYSQL_USER: campus
-      MYSQL_PASSWORD: campus123
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-campus123}
     ports:
       - "3306:3306"
     volumes:
@@ -16,6 +16,11 @@ services:
       - ./backend/src/main/resources/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - campus-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
@@ -26,6 +31,11 @@ services:
       - redis_data:/data
     networks:
       - campus-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -37,12 +47,15 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/smart_campus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=UTF-8
       SPRING_DATASOURCE_USERNAME: campus
-      SPRING_DATASOURCE_PASSWORD: campus123
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-campus123}
       SPRING_REDIS_HOST: redis
       SPRING_REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-SmartCampusReservationSystem2024SecretKeyForJWT}
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: on-failure
     networks:
       - campus-net

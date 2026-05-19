@@ -10,6 +10,7 @@
 [![Redis](https://img.shields.io/badge/Redis-7-DC382D)](https://redis.io/)
 [![Docker](https://img.shields.io/badge/Docker-✔-2496ED)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-blue)](.github/workflows/ci.yml)
 
 </div>
 
@@ -26,7 +27,10 @@
 - [默认账号](#-默认账号)
 - [API 概览](#-api-概览)
 - [项目结构](#-项目结构)
+- [安全说明](#-安全说明)
+- [测试](#-测试)
 - [演示截图](#-演示截图)
+- [如何贡献](#-如何贡献)
 - [关于](#-关于)
 
 ---
@@ -125,13 +129,17 @@
 git clone https://github.com/Vae-Scrooge/smart-campus-reservation.git
 cd smart-campus-reservation
 
-# 2. 一键启动所有服务
+# 2. （可选）修改环境变量
+cp .env.example .env
+# 编辑 .env 文件中的密码和密钥
+
+# 3. 一键启动所有服务
 docker compose up -d
 
-# 3. 查看运行状态
+# 4. 查看运行状态
 docker compose ps
 
-# 4. （可选）查看实时日志
+# 5. （可选）查看实时日志
 docker compose logs -f
 ```
 
@@ -175,8 +183,8 @@ npm run dev
 
 ## 📡 API 概览
 
-| 方法 | 路径 | 说明 | 需Token |
-|------|------|------|------|
+| 方法 | 路径 | 说明 | 需 Token |
+|------|------|------|---------|
 | `POST` | `/api/auth/login` | 用户登录，返回 JWT | ❌ |
 | `POST` | `/api/auth/register` | 用户注册 | ❌ |
 | `GET` | `/api/resources` | 获取所有资源列表 | ✅ |
@@ -187,6 +195,7 @@ npm run dev
 | `PUT` | `/api/reservations/{id}/cancel` | 取消预约 | ✅ |
 | `PUT` | `/api/reservations/{id}/checkin` | 签到 | ✅ |
 | `GET` | `/api/user/profile` | 获取用户信息 | ✅ |
+| `GET` | `/api/health` | 健康检查 | ❌ |
 
 ---
 
@@ -199,9 +208,10 @@ smart-campus-reservation/
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── java/com/smartcampus/
-│   │   │   │   ├── config/         # 安全、JWT、Redis 配置
+│   │   │   │   ├── config/         # 安全、JWT、Redis、CORS 配置
 │   │   │   │   ├── controller/     # REST API 控制器
 │   │   │   │   ├── dto/            # 数据传输对象
+│   │   │   │   ├── exception/      # 全局异常处理
 │   │   │   │   ├── model/          # 实体类
 │   │   │   │   ├── repository/     # 数据访问层
 │   │   │   │   └── service/        # 业务逻辑层
@@ -225,12 +235,41 @@ smart-campus-reservation/
 │   │       ├── Reservations.vue
 │   │       ├── Admin.vue
 │   │       └── Profile.vue
+│   ├── nginx.conf                  # Nginx 生产配置
 │   └── package.json
 │
 ├── screenshots/                    # 演示截图
+├── .github/workflows/              # CI/CD 配置
 ├── docker-compose.yml              # Docker 容器编排
+├── .env.example                    # 环境变量模板
+├── CONTRIBUTING.md                 # 贡献指南
 └── README.md
 ```
+
+---
+
+## 🔒 安全说明
+
+- **JWT 密钥**：通过环境变量 `JWT_SECRET` 配置，禁止硬编码在代码中
+- **密码存储**：用户密码经 BCrypt 加密存储，不保存明文
+- **鉴权机制**：所有 API（除登录/注册/健康检查外）均需 JWT 令牌验证
+- **角色控制**：管理员操作需 `ADMIN` 角色，普通用户无法访问管理接口
+- **CORS 防护**：配置了跨域策略，仅允许受信任的来源访问
+- **容器安全**：Docker 服务运行在独立网络中，端口按需暴露
+
+---
+
+## 🧪 测试
+
+```bash
+# 后端测试
+cd backend && mvn test
+
+# 前端构建验证（测试框架待添加）
+cd frontend && npm run build
+```
+
+> 当前版本：v1.0.0 · 更多测试用例持续添加中
 
 ---
 
@@ -246,8 +285,30 @@ smart-campus-reservation/
 
 ---
 
+## 🤝 如何贡献
+
+欢迎贡献代码、提交 Issue 或改进建议！
+
+1. Fork 本仓库
+2. 创建特性分支：`git checkout -b feature/your-feature`
+3. 提交变更：`git commit -m 'Add some feature'`
+4. 推送分支：`git push origin feature/your-feature`
+5. 提交 Pull Request
+
+详细规范请参见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+---
+
 ## 📄 关于
 
 **软件工程 4 班第 3 组 · 创新创业理论与实务课程项目**
+
+| 成员 | 角色 |
+|------|------|
+| 符升蓝 | 汇报人 |
+| 柯泽宇 | 待补充 |
+| 李康舜 | 待补充 |
+| 李泽延 | 待补充 |
+| 梁子俊 | 待补充 |
 
 如有问题或建议，欢迎提交 [Issue](https://github.com/Vae-Scrooge/smart-campus-reservation/issues) 或 Pull Request。
