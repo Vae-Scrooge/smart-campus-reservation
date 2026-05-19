@@ -303,12 +303,4 @@ cd frontend && npm run build
 
 **软件工程 4 班第 3 组 · 创新创业理论与实务课程项目**
 
-| 成员 | 角色 |
-|------|------|
-| 符升蓝 | 汇报人 |
-| 柯泽宇 | 待补充 |
-| 李康舜 | 待补充 |
-| 李泽延 | 待补充 |
-| 梁子俊 | 待补充 |
-
 如有问题或建议，欢迎提交 [Issue](https://github.com/Vae-Scrooge/smart-campus-reservation/issues) 或 Pull Request。
